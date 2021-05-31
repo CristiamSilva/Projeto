@@ -1,19 +1,17 @@
 package br.com.zup.controleVeiculos.veiculos;
 
+import br.com.zup.controleVeiculos.Exceptions.Excessoes;
 import br.com.zup.controleVeiculos.usuarios.UsuarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/usuario/veiculos")
 public class VeiculoController {
 
-    @Autowired
     private VeiculoRepository veiculoRepository;
     private UsuarioRepository usuarioRepository;
     private VeiculosService service;
@@ -24,12 +22,25 @@ public class VeiculoController {
         this.service = service;
     }
 
-    @PostMapping                                    //Recebe dados no corpo Atravé da classe VeiculosRequest
+    @PostMapping                                    //Recebe dados no corpo Através da classe VeiculosRequest
     public ResponseEntity<?> cadastraVeiculoUsuario(@RequestBody VeiculoRequest request){
-        service.getValorVeiculo(request.getTipo(), request.getMarcaVeiculo(), request.getModeloVeiculo());
-        Veiculo veiculo = request.toVeiculo(usuarioRepository);
+        String valorVeiculo = service.getValorVeiculo(request.getTipo(), request.getMarcaVeiculo(), request.getModeloVeiculo(), request.getAnoVeiculo());
+        String verificaDiaRodizio = service.getDiaRodizio(request.getAnoVeiculo());
+        boolean ativaRodizio = service.ativaRodizio(request.getAnoVeiculo());
+        Veiculo veiculo = request.toVeiculo(usuarioRepository, valorVeiculo, verificaDiaRodizio, ativaRodizio);
+        if(veiculo.getModeloVeiculo() == null || veiculo.getModeloVeiculo() == null || veiculo.getMarcaVeiculo() == null
+         || veiculo.getAnoVeiculo() == null){
+            throw new Excessoes  ("Dados do veiculo incorretos");
+        }
         veiculoRepository.save(veiculo);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @GetMapping( "/{usuarioId}" )
+    public List<VeiculoResponse> findAll () {
+        List<Veiculo> veiculos = veiculoRepository.findAll();
+        return VeiculoResponse.listarveiculos(veiculos);
+    }
 }
+
+

@@ -10,9 +10,11 @@ import java.util.List;
 public interface FipeClient {
 
     @GetMapping("/{tipo}/marcas")
-    List<Marcas> getMarcas(@PathVariable String tipo);
+    List<Marca> buscarMarcas(@PathVariable String tipo);
 
     @GetMapping("/{tipo}/marcas/{codigoMarca}/modelos")
-    List<Modelos>  getModelos(@PathVariable String tipo, @PathVariable String codigoMarca);
+    ListaModeloEAno buscarModelosEAnos(@PathVariable("tipo") String tipo, @PathVariable("codigoMarca") String codigoMarca);
 
+    @GetMapping("/{tipo}/marcas/{codigoMarca}/modelos/{codigoModelo}/anos/{codigoAno}")
+    InfoVeiculo buscarVeiculo(@PathVariable("tipo") String tipo, @PathVariable("codigoMarca") String codigoMarca, @PathVariable("codigoModelo") String codigoModelo, @PathVariable("codigoAno") String codigoAno);
 }

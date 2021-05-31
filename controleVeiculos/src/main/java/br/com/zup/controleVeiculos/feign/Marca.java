@@ -1,10 +1,12 @@
 package br.com.zup.controleVeiculos.feign;
 
-public class Modelo {
+
+public class Marca {
+
     private String nome;
     private String codigo;
 
-    public Modelo(String nome, String codigo) {
+    public Marca(String nome, String codigo) {
         this.nome = nome;
         this.codigo = codigo;
     }

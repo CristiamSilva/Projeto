@@ -10,6 +10,6 @@ public class ControleVeiculosApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ControleVeiculosApplication.class, args);
-	}
 
+	}
 }

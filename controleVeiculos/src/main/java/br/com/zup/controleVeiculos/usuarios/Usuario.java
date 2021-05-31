@@ -43,6 +43,9 @@ public class Usuario {
                 '}';
     }
 
+    public Long getId() {
+        return id;
+    }
 
     public List<Veiculo> getVeiculos() {
         return veiculos;
